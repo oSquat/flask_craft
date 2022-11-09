@@ -1,0 +1,10 @@
+env
+__pycache__
+*.pyc
+*.pyx
+*.swp
+*.swo
+*.bak
+*.conf
+*.log
+instance
