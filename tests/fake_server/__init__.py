@@ -40,6 +40,13 @@ class FakeServer(RCONServer):
 
         self.server = DummyServer()
 
+    @classmethod
+    def generator(cls):
+        logging.getLogger().addHandler(logging.StreamHandler())
+        fake_server = cls(password='x')
+        return fake_server
+
+
     async def listen(self):
         """Override parent method to make server is a class attribute."""
 
@@ -80,6 +87,13 @@ class FakeServer(RCONServer):
         if command == 'stop':
             self._exit()
 
+    # -------------------------
+    # Server management methods
+    # -------------------------
+
+    # -------------------------
+    # Minecraft server commands
+    # -------------------------
     def _list(self):
         s = f'there are {self.p} players online'
         self.p += 1
@@ -116,12 +130,6 @@ class FakeServer(RCONServer):
             self.server.close()
         while self.server.is_serving():
             time.sleep(0.25)
-
-    @classmethod
-    def generator(cls):
-        logging.getLogger().addHandler(logging.StreamHandler())
-        fake_server = cls(password='x')
-        return fake_server
 
 
 if __name__ == '__main__':
