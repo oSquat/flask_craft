@@ -111,6 +111,7 @@ class FakeServer(RCONServer):
         return s
 
     def _exit(self):
+        """Exit the server"""
         if self.server.is_serving():
             self.server.close()
         while self.server.is_serving():
