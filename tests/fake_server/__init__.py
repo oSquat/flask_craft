@@ -16,7 +16,11 @@ class DummyServer:
 
 
 class FakeServer(RCONServer):
+    """A mock minecraft server accessible via rcon.
 
+    Mimick's a minecraft server's properties, players, commands, etc..
+    The object offers methods to manipulate server properties.
+    """
 
     def __init__(self, bind=('localhost',25575), password=None):
         """Overload RCONServer's init
