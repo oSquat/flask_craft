@@ -100,6 +100,13 @@ class FakeServer(RCONServer):
         # f'{name}[/saddress:sport] logged in with entity id <UUID> at (X, Y, Z)
         logger.info(f'{name} joined the game')
 
+    def player_leave(self, name):
+        if not name in self._players:
+            raise RuntimeError(f'invalid player {name}')
+        self._players.remove(name)
+        logger.info(f'{name} lost connection: Disconnected')
+        logger.info(f'{name} left the game')
+
     # -------------------------
     # Minecraft server commands
     # -------------------------
