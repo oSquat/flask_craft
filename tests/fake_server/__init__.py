@@ -8,6 +8,7 @@ import time
 
 from rcon_server.rcon_server import RCONServer, logger
 from rcon_server.rcon_message import RCONMessage
+from rcon_server.rcon_packet import RCONPacket
 
 class DummyServer:
     """A dummy server until the asyncio server is created"""
@@ -28,8 +29,9 @@ class FakeServer(RCONServer):
         Better defaults & internal setup to mimick a server.
         """
         self._world = 'My World'
+        self._max_players = 5
+        self._players = list()
 
-        self.p = 0
         
         super().__init__(bind, password)
 
@@ -68,9 +70,8 @@ class FakeServer(RCONServer):
         """Rcon server command handler."""
         command = packet.body.strip('/')
         logger.info(f'> {command}')
-        id_ = packet.id + 1
-        # type SERVERDATA_RESPONSE_VALUE
-        type_ = 0
+        id_ = packet.id
+        type_ = RCONPacket.SERVERDATA_RESPONSE_VALUE
         handler = self.command.get(
                 command, 
                 self._bad_command_or_file_name
@@ -95,8 +96,10 @@ class FakeServer(RCONServer):
     # Minecraft server commands
     # -------------------------
     def _list(self):
-        s = f'there are {self.p} players online'
-        self.p += 1
+        s = (
+            f'There are {len(self._players)} of a max of {self._max_players} '
+            'players online: '
+        )
         return s
 
     def _stop(self):
