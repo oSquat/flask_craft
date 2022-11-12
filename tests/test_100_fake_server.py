@@ -23,4 +23,9 @@ def test_list_0(mcr):
         time.sleep(0.25)
         print('waiting on response')
     assert response.strip() == 'There are 0 of a max of 5 players online:' 
+
+def test_list_1(fake_server, mcr):
+    fake_server.player_join('rusty_shackleford')
+    response = mcr.command('/list')
+    assert response.strip().startswith('There are 1 of a max of 5 players online:')
     
