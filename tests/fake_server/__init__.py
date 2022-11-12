@@ -38,6 +38,7 @@ class FakeServer(RCONServer):
         self.command = {
             'list': self._list,
             'stop': self._stop,
+            'kick': self._kick,
         }
 
         self.server = DummyServer()
@@ -67,7 +68,10 @@ class FakeServer(RCONServer):
 
     def handle_execcommand(self, packet, connection):
         """Rcon server command handler."""
-        command = packet.body.strip('/')
+        command_line = packet.body.strip('/')
+        argv = command_line.split(' ')
+        command = argv[0]
+
         logger.info(f'> {command}')
         id_ = packet.id
         type_ = RCONPacket.SERVERDATA_RESPONSE_VALUE
@@ -75,7 +79,7 @@ class FakeServer(RCONServer):
                 command, 
                 self._bad_command_or_file_name
         )
-        response = handler()
+        response = handler(*argv[1:])
         logger.info(response)
         message = RCONMessage(
             id=id_,
@@ -117,6 +121,15 @@ class FakeServer(RCONServer):
             f"{''.join(self._players)}"
         )
         return s
+
+    def _kick(self, name, reason='Kicked by an operator'):
+        """Kick a user, optionally with a customized reason"""
+        if not name in self._players:
+            return 'No player was found'
+        self._players.remove(name)
+        logger.info(f'{name} lost connection: {reason}')
+        logger.info(f'{name} left the game')
+        return f'Kicked {name}: {reason}'
 
     def _stop(self):
         s = (
