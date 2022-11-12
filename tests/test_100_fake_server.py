@@ -41,3 +41,7 @@ def test_list_shows_player_names(fake_server, mcr):
     for player in players:
         assert player in response
     
+def test_kick_invalid_player(mcr):
+    """Test expected return from kick command on invalid user"""
+    response = mcr.command('/kick bob')
+    assert response == 'No player was found'
