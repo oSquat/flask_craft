@@ -10,6 +10,7 @@ from rcon_server.rcon_server import RCONServer, logger
 from rcon_server.rcon_message import RCONMessage
 from rcon_server.rcon_packet import RCONPacket
 
+
 class DummyServer:
     """A dummy server until the asyncio server is created"""
     def is_serving(self):
@@ -31,7 +32,6 @@ class FakeServer(RCONServer):
         self._world = 'My World'
         self._max_players = 5
         self._players = list()
-
         
         super().__init__(bind, password)
 
@@ -47,7 +47,6 @@ class FakeServer(RCONServer):
         logging.getLogger().addHandler(logging.StreamHandler())
         fake_server = cls(password='x')
         return fake_server
-
 
     async def listen(self):
         """Override parent method to make server is a class attribute."""
