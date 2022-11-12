@@ -45,3 +45,8 @@ def test_kick_invalid_player(mcr):
     """Test expected return from kick command on invalid user"""
     response = mcr.command('/kick bob')
     assert response == 'No player was found'
+
+def test_kick_player(fake_server, mcr):
+    fake_server.player_join('burbles')
+    response = mcr.command('/kick burbles')
+    assert response == 'Kicked burbles: Kicked by an operator'
