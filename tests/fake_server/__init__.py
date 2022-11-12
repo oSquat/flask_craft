@@ -91,6 +91,12 @@ class FakeServer(RCONServer):
     # -------------------------
     # Server management methods
     # -------------------------
+    def player_join(self, name):
+        """A player joins the server."""
+        self._players.append(name)
+        # The following info is also logged, but I'm not ready to simulate it
+        # f'{name}[/saddress:sport] logged in with entity id <UUID> at (X, Y, Z)
+        logger.info(f'{name} joined the game')
 
     # -------------------------
     # Minecraft server commands
