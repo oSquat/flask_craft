@@ -50,3 +50,9 @@ def test_kick_player(fake_server, mcr):
     fake_server.player_join('burbles')
     response = mcr.command('/kick burbles')
     assert response == 'Kicked burbles: Kicked by an operator'
+
+def test_kick_player_with_reason(fake_server, mcr):
+    """Kick a player with a reason provided"""
+    fake_server.player_join('fluffy_ruffy')
+    response = mcr.command('/kick fluffy_ruffy Bad dog, don\'t do that!')
+    assert response == 'Kicked fluffy_ruffy: Bad dog, don\'t do that!'
