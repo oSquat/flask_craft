@@ -114,9 +114,7 @@ class FakeServer(RCONServer):
     def player_leave(self, name):
         if not name in self._players:
             raise RuntimeError(f'invalid player {name}')
-        self._players.remove(name)
-        logger.info(f'{name} lost connection: Disconnected')
-        logger.info(f'{name} left the game')
+        self._player_disconnect(name, 'Disconnected')
 
     # -------------------------
     # Minecraft server commands
@@ -134,9 +132,7 @@ class FakeServer(RCONServer):
         """Kick a user, optionally with a customized reason"""
         if not name in self._players:
             return 'No player was found'
-        self._players.remove(name)
-        logger.info(f'{name} lost connection: {reason}')
-        logger.info(f'{name} left the game')
+        self._player_disconnect(name, reason)
         return f'Kicked {name}: {reason}'
 
     def _stop(self):
@@ -163,6 +159,14 @@ class FakeServer(RCONServer):
             '????<--[HERE]'
         )
         return s
+
+    # --------------------------
+    # Internal server operations
+    # --------------------------
+    def _player_disconnect(self, name, reason):
+        self._players.remove(name)
+        logger.info(f'{name} lost connection: {reason}')
+        logger.info(f'{name} left the game')
 
 
 if __name__ == '__main__':
