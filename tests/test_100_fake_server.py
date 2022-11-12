@@ -15,3 +15,12 @@ def test_stop(fake_server, mcr):
     assert fake_server.server.is_serving() == True
     response = mcr.command('stop')
     assert fake_server.server.is_serving() == False
+
+def test_list_0(mcr):
+    """Test /list responds with 0 players"""
+    response = mcr.command('/list')
+    while response == '':
+        time.sleep(0.25)
+        print('waiting on response')
+    assert response.strip() == 'There are 0 of a max of 5 players online:' 
+    
