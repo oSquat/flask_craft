@@ -55,7 +55,6 @@ class FakeServer(RCONServer):
         self._loop = asyncio.get_event_loop()
         self.server = await self._loop.create_server(self.connection_factory,
                                           self.bind[0], self.bind[1])
-        print(self.server)
         async with self.server:
             logger.info("starting server")
             for socket in self.server.sockets:
@@ -97,7 +96,6 @@ class FakeServer(RCONServer):
             self.server.close()
         while self.server.is_serving():
             time.sleep(0.25)
-
 
     # -------------------------
     # Server management methods
