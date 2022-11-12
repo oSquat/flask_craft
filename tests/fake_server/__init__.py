@@ -93,6 +93,8 @@ class FakeServer(RCONServer):
     # -------------------------
     def player_join(self, name):
         """A player joins the server."""
+        if name in self._players:
+            raise RuntimeError(f'{name} already joined')
         self._players.append(name)
         # The following info is also logged, but I'm not ready to simulate it
         # f'{name}[/saddress:sport] logged in with entity id <UUID> at (X, Y, Z)
