@@ -25,10 +25,6 @@ fh.setFormatter(fmt)
 logger.addHandler(fh)
 logger.setLevel(logging.INFO)
 
-## Turn off rcon-server logging (maybe make this an option sometime)
-#rcon_logger = logging.getLogger('RCONServer')
-#rcon_logger.setLevel(logging.NOTSET)
-
 loggers = [str(logging.getLogger(name)) for name in logging.root.manager.loggerDict]
 print('\nList of loggers available:\n * ' + '\n * '.join(loggers))
 
