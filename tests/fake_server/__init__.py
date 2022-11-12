@@ -6,9 +6,31 @@ from asyncio.exceptions import CancelledError
 import logging 
 import time
 
-from rcon_server.rcon_server import RCONServer, logger
+from rcon_server.rcon_server import RCONServer
 from rcon_server.rcon_message import RCONMessage
 from rcon_server.rcon_packet import RCONPacket
+
+# Do some logger magic to make fake_server.log look like MC logs
+cmd_logger = logger = logging.getLogger('fake_server:cmd_logger')
+fh = logging.FileHandler(filename='./fake_server.log')
+fmt = logging.Formatter('%(message)s')
+fh.setFormatter(fmt)
+cmd_logger.addHandler(fh)
+cmd_logger.setLevel(logging.INFO)
+
+logger = logging.getLogger(__name__)
+fh = logging.FileHandler(filename='./fake_server.log')
+fmt = logging.Formatter('%(asctime)s: %(message)s', '[%H:%M:%S]')
+fh.setFormatter(fmt)
+logger.addHandler(fh)
+logger.setLevel(logging.INFO)
+
+## Turn off rcon-server logging (maybe make this an option sometime)
+#rcon_logger = logging.getLogger('RCONServer')
+#rcon_logger.setLevel(logging.NOTSET)
+
+loggers = [str(logging.getLogger(name)) for name in logging.root.manager.loggerDict]
+print('\nList of loggers available:\n * ' + '\n * '.join(loggers))
 
 
 class DummyServer:
@@ -71,7 +93,7 @@ class FakeServer(RCONServer):
         argv = command_line.split(' ')
         command = argv[0]
 
-        logger.info(f'> {command}')
+        cmd_logger.info(f'> {command}')
         id_ = packet.id
         type_ = RCONPacket.SERVERDATA_RESPONSE_VALUE
         handler = self.command.get(
