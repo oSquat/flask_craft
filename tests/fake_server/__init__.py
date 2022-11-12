@@ -25,9 +25,6 @@ fh.setFormatter(fmt)
 logger.addHandler(fh)
 logger.setLevel(logging.INFO)
 
-loggers = [str(logging.getLogger(name)) for name in logging.root.manager.loggerDict]
-print('\nList of loggers available:\n * ' + '\n * '.join(loggers))
-
 
 class DummyServer:
     """A dummy server until the asyncio server is created"""
