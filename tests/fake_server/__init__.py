@@ -86,7 +86,7 @@ class FakeServer(RCONServer):
         argv = command_line.split(' ')
         command = argv[0]
 
-        cmd_logger.info(f'> {command}')
+        cmd_logger.info(f'> {command_line}')
         id_ = packet.id
         type_ = RCONPacket.SERVERDATA_RESPONSE_VALUE
         handler = self.command.get(
