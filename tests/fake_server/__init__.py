@@ -149,8 +149,12 @@ class FakeServer(RCONServer):
         )
         return s
 
-    def _kick(self, name, reason='Kicked by an operator'):
+    def _kick(self, *args):
         """Kick a user, optionally with a customized reason"""
+        name = args[0]
+        reason = ' '.join(args[1:])
+        if len(reason) == 0:
+            reason='Kicked by an operator'
         if not name in self._players:
             return 'No player was found'
         self._player_disconnect(name, reason)
