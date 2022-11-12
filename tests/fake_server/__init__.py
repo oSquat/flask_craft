@@ -91,6 +91,14 @@ class FakeServer(RCONServer):
         if command == 'stop':
             self._exit()
 
+    def _exit(self):
+        """Exit the server"""
+        if self.server.is_serving():
+            self.server.close()
+        while self.server.is_serving():
+            time.sleep(0.25)
+
+
     # -------------------------
     # Server management methods
     # -------------------------
@@ -155,13 +163,6 @@ class FakeServer(RCONServer):
             '????<--[HERE]'
         )
         return s
-
-    def _exit(self):
-        """Exit the server"""
-        if self.server.is_serving():
-            self.server.close()
-        while self.server.is_serving():
-            time.sleep(0.25)
 
 
 if __name__ == '__main__':
