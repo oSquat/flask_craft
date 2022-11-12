@@ -104,9 +104,11 @@ class FakeServer(RCONServer):
     # Minecraft server commands
     # -------------------------
     def _list(self):
+        """Show a count of players in game and list them"""
         s = (
             f'There are {len(self._players)} of a max of {self._max_players} '
             'players online: '
+            f"{''.join(self._players)}"
         )
         return s
 
