@@ -94,11 +94,19 @@ class FakeServer(RCONServer):
                 self._bad_command_or_file_name
         )
         response = handler(*argv[1:])
-        logger.info(response)
+        if type(response) not in [str, list]:
+            raise RuntimeError(
+                    'Handlers must respond with a string or '
+                    'a list of strings')
+        if type(response) == str:
+            response = [response]
+
+        for line in response:
+            logger.info(line)
         message = RCONMessage(
             id=id_,
             type=type_,
-            body=response
+            body='\n'.join(response)
         )
         connection.send_packet(message)
 
@@ -149,21 +157,20 @@ class FakeServer(RCONServer):
         return f'Kicked {name}: {reason}'
 
     def _stop(self):
-        s = (
+        return [
             f'Stopping the server'
-            f'\nStopping server'
-            f'\nSaving players'
-            f'\nSaving worlds'
-            f'\nSaving chunks for level {self._world}/minecraft:overworld'
-            f'\nSaving chunks for level {self._world}/minecraft:the_nether'
-            f'\nSaving chunks for level {self._world}/minecraft:the_end'
-            f'\nThreadedAnvilChunkStorage (world): All chunks are saved'
-            f'\nThreadedAnvilChunkStorage (DIM-1): All chunks are saved'
-            f'\nThreadedAnvilChunkStorage (DIM1): All chunks are saved'
-            f'\nThreadedAnvilChunkStorage: All dimensions are saved'
-            f'\nThread RCON Listener stopped'
-        )
-        return s
+            ,f'Stopping server'
+            ,f'Saving players'
+            ,f'Saving worlds'
+            ,f'Saving chunks for level {self._world}/minecraft:overworld'
+            ,f'Saving chunks for level {self._world}/minecraft:the_nether'
+            ,f'Saving chunks for level {self._world}/minecraft:the_end'
+            ,f'ThreadedAnvilChunkStorage (world): All chunks are saved'
+            ,f'ThreadedAnvilChunkStorage (DIM-1): All chunks are saved'
+            ,f'ThreadedAnvilChunkStorage (DIM1): All chunks are saved'
+            ,f'ThreadedAnvilChunkStorage: All dimensions are saved'
+            ,f'Thread RCON Listener stopped'
+        ]
 
     def _bad_command_or_file_name(self):
         # this is incomplete, real server points to unknown command or argument
