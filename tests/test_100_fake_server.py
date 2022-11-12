@@ -28,4 +28,16 @@ def test_list_1(fake_server, mcr):
     fake_server.player_join('rusty_shackleford')
     response = mcr.command('/list')
     assert response.strip().startswith('There are 1 of a max of 5 players online:')
+
+def test_list_shows_player_names(fake_server, mcr):
+    """Join players to the server and issue the /list command.
+
+    Test the players are named in the output.
+    """
+    players = ['rusty_shackleford', 'mvp0849']
+    for player in players:
+        fake_server.player_join(player)
+    response = mcr.command('/list')
+    for player in players:
+        assert player in response
     
