@@ -176,7 +176,17 @@ def _app_base(alias=None, instance_path=None):
     config_file = config_files.get(app.profile, default_config)
 
     app.config.from_object("app.default_settings")
-    app.config.from_pyfile(config_file, True)
+    try:
+        app.config.from_pyfile(config_file)
+    except Exception as e:
+        # If no config file exists, intercept all requests and issue a warning
+        @app.before_request
+        def no_config_file():
+            return (
+                (f'Config file not found: '
+                 f'{os.path.join(app.instance_path, config_file)}'),
+                200
+            )
 
     app.startup_messages = list()
     if not os.path.exists(os.path.join(app.instance_path, config_file)):
