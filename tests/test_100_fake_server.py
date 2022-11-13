@@ -1,9 +1,5 @@
 """Test fake minecraft server commands behave as expected"""
 
-import subprocess
-import time
-
-from mcrcon import MCRconException
 import pytest
 
 default = pytest.mark.skipif("config.getoption('realserver')")
