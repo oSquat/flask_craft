@@ -140,6 +140,19 @@ def create_app(alias=None, instance_path=None):
     loggers = [str(logging.getLogger(name)) for name in logging.root.manager.loggerDict]
     app.logger.debug('\nList of loggers available:\n * ' + '\n * '.join(loggers))
 
+    if app._startup_failures:
+        @app.before_request
+        def no_config_file():
+            # A template might be nice
+            html = f'<h3>{app.alias} unmet requirements:</h3></ br><ul>'
+            for message in app._startup_failures:
+                html += f'<li>{message}</li>'
+            html += '</ul>'
+            return (
+                html,
+                200
+            )
+
     for startup_message in app.startup_messages:
         app.logger.info(startup_message)
     app.logger.info(f'App "{app.alias}" started with profile "{app.profile}"')
@@ -158,6 +171,9 @@ def _app_base(alias=None, instance_path=None):
         instance_relative_config=True,
         instance_path=instance_path)
     app.alias = alias
+
+    app.startup_messages = list()
+    app._startup_failures = list()
 
     # Set the profile to load additional config
     if app.debug:
@@ -179,16 +195,11 @@ def _app_base(alias=None, instance_path=None):
     try:
         app.config.from_pyfile(config_file)
     except Exception as e:
+        app._startup_failures.append(
+            f'Config file not found: '
+            f'{os.path.join(app.instance_path, config_file)}')
         # If no config file exists, intercept all requests and issue a warning
-        @app.before_request
-        def no_config_file():
-            return (
-                (f'Config file not found: '
-                 f'{os.path.join(app.instance_path, config_file)}'),
-                200
-            )
 
-    app.startup_messages = list()
     if not os.path.exists(os.path.join(app.instance_path, config_file)):
         app.startup_messages.append(
             f'No config file ({config_file}) found'
