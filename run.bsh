@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+
+#tmux -S /home/victor/dev/python/flask/flask_craft/instance/tmux_socket -t mc
+tmux -S ./instance/tmux_socket new-session -s mc -d
+
+# Although you should not need to do this except to test profiles, you can
+#   start in the testing profile use FLASK_TESTING=1
+#export FLASK_TESTING=1
+
+# or you can specify the app factory with arguments
+#flask --app "app:create_app(app_alias='thing')" run
+
+# for typical development, set --debug and the "development" profile will load
+flask --debug run
+
+tmux -S ./instance/tmux_socket send-keys 'exit' C-m
