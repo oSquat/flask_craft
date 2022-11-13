@@ -153,10 +153,10 @@ def create_app(alias=None, instance_path=None):
                 200
             )
 
-    for startup_message in app.startup_messages:
+    for startup_message in app._startup_messages:
         app.logger.info(startup_message)
     app.logger.info(f'App "{app.alias}" started with profile "{app.profile}"')
-    del app.startup_messages
+    del app._startup_messages
 
     return app
 
@@ -172,7 +172,8 @@ def _app_base(alias=None, instance_path=None):
         instance_path=instance_path)
     app.alias = alias
 
-    app.startup_messages = list()
+    # Startup messages are logged; failures are rendered to web clients
+    app._startup_messages = list()
     app._startup_failures = list()
 
     # Set the profile to load additional config
@@ -201,7 +202,7 @@ def _app_base(alias=None, instance_path=None):
         # If no config file exists, intercept all requests and issue a warning
 
     if not os.path.exists(os.path.join(app.instance_path, config_file)):
-        app.startup_messages.append(
+        app._startup_messages.append(
             f'No config file ({config_file}) found'
         )
 
