@@ -14,6 +14,11 @@ import pytest
 
 from fake_server import FakeServer
 
+sys.path.append(os.getcwd())
+os.environ['FLASK_TESTING'] = '1'
+
+from app import create_app, fake_app
+
 
 class MCRcon(MCRconLib):
     """Override MCRcon to add a functioning id to rcon messaging.
@@ -124,15 +129,6 @@ def pytest_addoption(parser):
     parser.addoption('--realserver', action='store_true', dest='realserver',
             default=False, help='only run tests against the real server')
 
-@pytest.fixture(scope='session')
-def app(tmux_session):
-    """Yield a fake flask app"""
-    alias = os.path.basename(os.getcwd())
-    flask_app = create_app(alias)
-    app_context = flask_app.test_request_context()
-    app_context.push()
-    yield flask_app
-
 @pytest.fixture(scope='function')
 def fake_server():
     """Yield a fake minecraft server available via rcon"""
@@ -157,6 +153,15 @@ def mcr(fake_server):
         yield mcr
         if fake_server.server.is_serving():
             mcr.command('stop')        
+
+@pytest.fixture(scope='session')
+def app(tmux_session):
+    """Yield a fake flask app"""
+    alias = os.path.basename(os.getcwd())
+    flask_app = create_app(alias)
+    app_context = flask_app.test_request_context()
+    app_context.push()
+    yield flask_app
 
 @pytest.fixture(scope='function')
 def client(app):
