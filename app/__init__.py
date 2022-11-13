@@ -1,4 +1,5 @@
 
+import atexit
 import logging
 from logging.config import dictConfig
 import os
@@ -128,7 +129,6 @@ def create_app(alias=None, instance_path=None):
     # Initialize extensions
 
     # Connect to the RCON server
-    # TODO: Disconnect cleanly on shutdown
     # TODO: Add ability for app to reconnect if disconnected
     if len(app.config.get('RCON_SERVER', None)) == 0:
         app._startup_failures.append('No RCON server set in the config file')
@@ -145,6 +145,13 @@ def create_app(alias=None, instance_path=None):
             'Could not connect to RCON server; see log for additional details')
         app.logger.error(f'Failure connection to Minecraft RCON server:\n{e}')
 
+    # When the app is closing, close all connections
+    def _app_cleanup():
+        app.logger.info(f'App "{app.alias}" shutting down')
+        app.logger.info('Disconnecting from RCON server')
+        app.mcr.disconnect()
+
+    atexit.register(_app_cleanup)
     # Register blueprints
     # -------------------
     from .main import main
