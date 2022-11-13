@@ -140,6 +140,9 @@ def create_app(alias=None, instance_path=None):
         )
     try:
         app.mcr.connect()
+        app._startup_messages.append((
+                f'Connected to RCON server at '
+                f"{app.config['RCON_SERVER']}:{app.config['RCON_PORT']}"))
     except Exception as e:
         app._startup_failures.append(
             'Could not connect to RCON server; see log for additional details')
