@@ -5,6 +5,5 @@ __pycache__
 *.swp
 *.swo
 *.bak
-*.conf
 *.log
 instance
