@@ -5,6 +5,7 @@ import os
 
 from flask import Flask, request
 from flask.logging import default_handler
+from mcrcon import MCRcon
 
 ####################
 # Flask extensions #
@@ -125,9 +126,24 @@ def create_app(alias=None, instance_path=None):
     # Just about all modifications to the template should go here
 
     # Initialize extensions
-    # TODO: establish an rcon server connection here
-    #   Later todo is to ensure reconnection is attempted if connection is
-    #   failed and communicate a failed connection to the user.
+
+    # Connect to the RCON server
+    # TODO: Disconnect cleanly on shutdown
+    # TODO: Add ability for app to reconnect if disconnected
+    if len(app.config.get('RCON_SERVER', None)) == 0:
+        app._startup_failures.append('No RCON server set in the config file')
+    else:
+        app.mcr = MCRcon(
+            host = app.config['RCON_SERVER'],
+            password = app.config['RCON_PASSWD'],
+            port = app.config['RCON_PORT']
+        )
+    try:
+        app.mcr.connect()
+    except Exception as e:
+        app._startup_failures.append(
+            'Could not connect to RCON server; see log for additional details')
+        app.logger.error(f'Failure connection to Minecraft RCON server:\n{e}')
 
     # Register blueprints
     # -------------------
