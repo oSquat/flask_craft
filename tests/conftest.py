@@ -155,7 +155,7 @@ def mcr(fake_server):
             mcr.command('stop')        
 
 @pytest.fixture(scope='session')
-def app(tmux_session):
+def app():
     """Yield a fake flask app"""
     alias = os.path.basename(os.getcwd())
     flask_app = create_app(alias)
