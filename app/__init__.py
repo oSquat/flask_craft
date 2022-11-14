@@ -4,7 +4,7 @@ import logging
 from logging.config import dictConfig
 import os
 
-from flask import Flask, request
+from flask import Flask
 from flask.logging import default_handler
 from mcrcon import MCRcon
 
@@ -113,7 +113,7 @@ def create_app(alias=None, instance_path=None):
     loggers = [
         logger.lower()[6:]
         for logger, value in app.config.items()
-        if logger.startswith('DEBUG_') and value == True
+        if logger.startswith('DEBUG_') is True and value is True
     ]
     for logger in loggers:
         logging.getLogger(logger).setLevel(logging.DEBUG)
@@ -134,9 +134,9 @@ def create_app(alias=None, instance_path=None):
         app._startup_failures.append('No RCON server set in the config file')
     else:
         app.mcr = MCRcon(
-            host = app.config['RCON_SERVER'],
-            password = app.config['RCON_PASSWD'],
-            port = app.config['RCON_PORT']
+            host=app.config['RCON_SERVER'],
+            password=app.config['RCON_PASSWD'],
+            port=app.config['RCON_PORT']
         )
     try:
         app.mcr.connect()
@@ -163,8 +163,14 @@ def create_app(alias=None, instance_path=None):
     # Helpful log output before return
     # --------------------------------
     # list all loggers (helps to identify other log levels you can set)
-    loggers = [str(logging.getLogger(name)) for name in logging.root.manager.loggerDict]
-    app.logger.debug('\nList of loggers available:\n * ' + '\n * '.join(loggers))
+    loggers = [
+        str(logging.getLogger(name))
+        for name in logging.root.manager.loggerDict
+    ]
+    app.logger.debug(
+        '\nList of loggers available:\n * '
+        '\n * '.join(loggers)
+    )
 
     if app._startup_failures:
         @app.before_request
@@ -186,6 +192,7 @@ def create_app(alias=None, instance_path=None):
 
     return app
 
+
 def _app_base(alias=None, instance_path=None):
     """Returns a basic flask app, ready to initialize (or as a fake)."""
 
@@ -193,7 +200,8 @@ def _app_base(alias=None, instance_path=None):
         alias = os.path.basename(os.getcwd())
 
     # Create the app
-    app = Flask(__name__.split('.')[0],
+    app = Flask(
+        __name__.split('.')[0],
         instance_relative_config=True,
         instance_path=instance_path)
     app.alias = alias
@@ -221,7 +229,7 @@ def _app_base(alias=None, instance_path=None):
     app.config.from_object("app.default_settings")
     try:
         app.config.from_pyfile(config_file)
-    except Exception as e:
+    except Exception:
         app._startup_failures.append(
             f'Config file not found: '
             f'{os.path.join(app.instance_path, config_file)}')
@@ -237,6 +245,7 @@ def _app_base(alias=None, instance_path=None):
     #   the instance folder a better way to corral things.
 
     return app
+
 
 def fake_app(alias=None, instance_path=None):
     """Return an application base for config value access only."""
