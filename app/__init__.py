@@ -160,6 +160,9 @@ def create_app(alias=None, instance_path=None):
     from .main import main
     app.register_blueprint(main, url_prefix='/')
 
+    from .cmd import cmd
+    app.register_blueprint(cmd, url_prefix='/cmd/')
+
     # Helpful log output before return
     # --------------------------------
     # list all loggers (helps to identify other log levels you can set)
