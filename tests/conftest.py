@@ -145,6 +145,9 @@ def fake_server():
     while not fake_server.server.is_serving():
         time.sleep(0.25)
     yield fake_server
+    if fake_server.server.is_serving():
+        with MCRcon('localhost', 'password') as mcr:
+            mcr.command('stop')        
 
 @pytest.fixture(scope='function')
 def mcr(fake_server):
