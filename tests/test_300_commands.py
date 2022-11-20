@@ -21,3 +21,14 @@ def test_cmd_list(fake_server, client):
         assert player in players
     for player in players:
         assert player in j['response']['players']
+
+def test_cmd_list_count(fake_server, client):
+    """The list command should return the number of in-game players"""
+    # get a random number of players
+    n = int(get_random(1, 'num'))
+    players = [get_random(5) for i in range(0, n)]
+    for player in players:
+        fake_server.player_join(player)
+    rv = client.get(url_for('cmd.list'))
+    j = json.loads(rv.data)
+    assert j['response']['count'] == n
