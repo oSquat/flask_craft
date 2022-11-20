@@ -42,8 +42,7 @@ def fake_server():
 
     t = SysExitThread(target=_run)
     t.start()
-    # it takes a moment for our server to start, but is there a better way to
-    #   test for this? I would expect fake_server.server.is_serving() to work.
+    # it takes a moment for our server to start
     while not fake_server.server.is_serving():
         time.sleep(0.25)
     yield fake_server
