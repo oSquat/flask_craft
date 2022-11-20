@@ -30,13 +30,11 @@ def list():
     if not match:
         raise RuntimeError('missing or unexpected list result on player list')
     player_list = match[0]
-    d = {'response':
-         {
+    d = {
             'count': player_count,
             'max': player_max,
             'players': player_list.split(', ')
         }
-    }
     return (d, 200)
 
 @cmd.route('/kick/<user>', methods=['GET'])
