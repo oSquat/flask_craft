@@ -31,6 +31,21 @@ def pytest_addoption(parser):
     parser.addoption('--realserver', action='store_true', dest='realserver',
             default=False, help='only run tests against the real server')
 
+def get_random(n, chars='alnum'):
+    """Get a random [alpha]numeric string with a length of n-characters.
+
+    Arguments:
+    n       - number of characters
+    chars   - "alnum" or "num"
+    """
+    if chars=='num':
+        return ''.join(random.choice(string.digits) for _ in range(n))
+    elif chars=='alnum':
+        return ''.join(random.choice(
+                string.ascii_uppercase + string.digits) for _ in range(n))
+    else:
+        raise RuntimeError('chars must be either "alnum" or "num".')
+
 @pytest.fixture(scope='function')
 def fake_server():
     """Yield a fake minecraft server available via rcon"""
