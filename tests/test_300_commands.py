@@ -32,3 +32,10 @@ def test_cmd_list_count(fake_server, client):
     rv = client.get(url_for('cmd.list'))
     j = json.loads(rv.data)
     assert j['count'] == n
+
+def test_cmd_list_max(fake_server, client):
+    """The list command should return the maximum player count"""
+    # get a random number of players
+    rv = client.get(url_for('cmd.list'))
+    j = json.loads(rv.data)
+    assert j['max'] == 5
