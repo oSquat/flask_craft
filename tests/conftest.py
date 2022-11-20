@@ -59,7 +59,7 @@ def mcr(fake_server):
         if fake_server.server.is_serving():
             mcr.command('stop')        
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope='function')
 def app():
     """Yield a fake flask app"""
     alias = os.path.basename(os.getcwd())
