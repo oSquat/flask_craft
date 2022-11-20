@@ -4,6 +4,7 @@
 import asyncio
 from asyncio.exceptions import CancelledError
 import logging 
+import threading
 import time
 
 from rcon_server.rcon_server import RCONServer
@@ -24,6 +25,30 @@ fmt = logging.Formatter('%(asctime)s: %(message)s', '[%H:%M:%S]')
 fh.setFormatter(fmt)
 logger.addHandler(fh)
 logger.setLevel(logging.INFO)
+
+
+class SysExitThread(threading.Thread):
+    """Pass exception from thread run to the parent"""
+    # This is a workaround I found to an odd situation that arises
+    #   as a result of combining asyncio with threading.
+    def __init__(self, group=None, target=None, 
+                 name=None, args=(), kwargs=None, 
+                 *, daemon=None):
+        super().__init__(group=group, target=target, 
+                         name=name, args=args, 
+                         kwargs=kwargs, daemon=daemon)
+        self._exc = None
+
+    def run(self):
+        try:
+            super().run()
+        except SystemExit as exc:
+            self._exc = exc
+
+    def join(self, timeout=None):
+        super().join(timeout=timeout)
+        if self._exc:
+            raise self._exc
 
 
 class DummyServer:
