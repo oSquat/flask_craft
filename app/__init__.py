@@ -146,7 +146,9 @@ def create_app(alias=None, instance_path=None):
     except Exception as e:
         app._startup_failures.append(
             'Could not connect to RCON server; see log for additional details')
-        app.logger.error(f'Failure connection to Minecraft RCON server:\n{e}')
+        app.logger.error((
+                f'Connection failure to Minecraft RCON server '
+                f"{app.config['RCON_SERVER']}:{app.config['RCON_PORT']}:\n{e}"))
 
     # When the app is closing, close all connections
     def _app_cleanup():
