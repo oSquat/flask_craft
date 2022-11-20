@@ -7,8 +7,8 @@ from flask import current_app
 from . import logger
 from . import cmd
 
-list_player_count = re.compile('(?<=There are )\d*')
-list_player_max = re.compile('(?<=a max of )\d*')
+list_player_count = re.compile('(?<=There are )\\d*')
+list_player_max = re.compile('(?<=a max of )\\d*')
 list_players = re.compile('(?<=online: ).*')
 
 @cmd.route('/', methods=['GET'])
