@@ -170,7 +170,7 @@ class FakeServer(RCONServer):
         s = (
             f'There are {len(self._players)} of a max of {self._max_players} '
             'players online: '
-            f"{''.join(self._players)}"
+            f"{', '.join(self._players)}"
         )
         return s
 
