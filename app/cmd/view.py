@@ -21,11 +21,11 @@ def list():
     match = list_player_count.findall(response)
     if not match:
         raise RuntimeError('missing or unexpected list result on count:')
-    player_count = match[0]
+    player_count = int(match[0])
     match = list_player_max.findall(response)
     if not match:
         raise RuntimeError('missing or unexpected list result on max')
-    player_max = match[0]
+    player_max = int(match[0])
     match = list_players.findall(response)
     if not match:
         raise RuntimeError('missing or unexpected list result on player list')
