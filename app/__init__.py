@@ -25,6 +25,20 @@ class ApplicationLogFilter(logging.Filter):
             allow = False
         return allow
 
+class MCR():
+    def __init__(self, _mcr):
+        self._mcr = _mcr
+
+    # This is a terrible workaround. Sometimes mcr doesn't return a value
+    # we're expecting in testing, it returns nothing. I don't know if this is
+    # a failing of our fake_server or what, but running a couple times until
+    # we get a response seems to fix things for now.
+    def command(self, command):
+        for _ in range(0,3):
+            response = self._mcr.command('list')
+            if len(response) > 0: continue
+        return response
+
 
 def create_app(alias=None, instance_path=None):
     '''The main function with which our flask app is created.
@@ -133,13 +147,13 @@ def create_app(alias=None, instance_path=None):
     if len(app.config.get('RCON_SERVER', None)) == 0:
         app._startup_failures.append('No RCON server set in the config file')
     else:
-        app.mcr = MCRcon(
+        app._mcr = MCRcon(
             host=app.config['RCON_SERVER'],
             password=app.config['RCON_PASSWD'],
             port=app.config['RCON_PORT']
         )
     try:
-        app.mcr.connect()
+        app._mcr.connect()
         app._startup_messages.append((
                 f'Connected to RCON server at '
                 f"{app.config['RCON_SERVER']}:{app.config['RCON_PORT']}"))
@@ -150,11 +164,13 @@ def create_app(alias=None, instance_path=None):
                 f'Connection failure to Minecraft RCON server '
                 f"{app.config['RCON_SERVER']}:{app.config['RCON_PORT']}:\n{e}"))
 
+    app.mcr = MCR(app._mcr)
+
     # When the app is closing, close all connections
     def _app_cleanup():
         app.logger.info(f'App "{app.alias}" shutting down')
         app.logger.info('Disconnecting from RCON server')
-        app.mcr.disconnect()
+        app._mcr.disconnect()
 
     atexit.register(_app_cleanup)
     # Register blueprints
