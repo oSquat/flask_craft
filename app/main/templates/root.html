@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block js %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}
+{% block content %}
+<div id="players" class="content">
+  <h5>Loading...</h5>
+</div>
+<input type="hidden" id="url-cmd-list" value={{ url_for('cmd.list') }} />
+    
+{% endblock %}

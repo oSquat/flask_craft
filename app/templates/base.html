@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>Flask Craft</title>
+  <meta name="description" content="Flask App">
+  <meta name="author" content="Vic Simeone">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/skeleton.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+  {%block css %}{% endblock %}
+
+  <!-- JS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  {%block js %}{% endblock %}
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+
+</head>
+<body>
+  <div class="container body-margin">
+	  <!--<a href="/"><img width=450 src="{{ url_for('static', filename='images/attalus.png') }}"></a>-->
+	  <br \>
+  </div>
+  <div class="container body-margin">
+    <h1>Flask Craft</h1>
+    <!-- menu
+    <div class="row">
+      <div class="four columns">
+	      one
+      </div>
+      <div class="four columns">
+	      two
+      </div>
+      <div class="four columns">
+	      three
+      </div>
+    </div>
+    -->
+    <hr>
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
