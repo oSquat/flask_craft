@@ -62,3 +62,21 @@ def test_cmd_kick(fake_server, client):
     rv = client.get(url_for('cmd.list'))
     j = json.loads(rv.data)
     assert j['count'] == 2
+
+def test_cmd_kick_returns_success_result(fake_server, client):
+    """Test kick command response result can be success"""
+    # add 3 players, choose the first to kick
+    players = [get_random(5) for i in range(0, 3)]
+    for player in players:
+        fake_server.player_join(player)
+    player = players[0]
+
+    # kick the player, and confirm player count is 2
+    rv = client.post(
+        url_for('cmd.kick'),
+        content_type='application/json',
+        data=json.dumps({'player': player})
+    )
+    j = json.loads(rv.data)
+
+    assert j['result'] == 'success'
