@@ -29,11 +29,19 @@ if __name__ == '__main__':
 
     print('connecting mcr...')
     mcr.connect()
+    print('mcr connected...\n')
 
-    print('mcr connected...')
-    print('\n')
-    print('To terminate the fake_server, then exit():')
-    print('>>> mcr.command("stop")')
-    print('')
+    print((
+        'The fake_server object can be used to manipulate the server state to\n'
+        'mimic a real server, separate from commands available through the\n'
+        'RCON server. For example, players can join and leave.\n'
+        "  > fake_server.player_join('example_player')\n"
+        "  > fake_Server.player_leave(''example_player')\n"
+    ))
+
+    print('To terminate the fake_server, use the "stop" command:')
+    print("  > mcr.command('stop')\n")
+
+    print('Then you can exit() like any normal Python interactive shell')
     # TODO: Intercept sigint and handle server termination
 
