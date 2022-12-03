@@ -136,9 +136,9 @@ def create_app(alias=None, instance_path=None):
         logging.getLogger(logger).setLevel(logging.DEBUG)
 
     # set loglevel DEBUG on the root/app logger
-    logging.getLogger('app').setLevel(logging.INFO)
+    app.logger.setLevel(logging.INFO)
     if app.config.get('ROOT_LOG_LEVEL_DEBUG', None):
-        logging.getLogger('app').setLevel(logging.DEBUG)
+        app.logger.setLevel(logging.DEBUG)
 
     # #########################################################################
     # Just about all modifications to the template should go here
