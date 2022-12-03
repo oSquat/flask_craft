@@ -191,9 +191,10 @@ def create_app(alias=None, instance_path=None):
         str(logging.getLogger(name))
         for name in logging.root.manager.loggerDict
     ]
+    logger_list = '\n * '.join(loggers)
     app.logger.debug(
-        '\nList of loggers available:\n * '
-        '\n * '.join(loggers)
+        '\nList of loggers available:'
+        f'{logger_list}'
     )
 
     if app._startup_failures:
