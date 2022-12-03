@@ -17,6 +17,7 @@ def root():
 
 @cmd.route('/list/')
 def list():
+    """Show player count, max players, and a list of current players"""
     response = current_app.mcr.command('list')
     match = list_player_count.findall(response)
     if not match:
@@ -37,6 +38,7 @@ def list():
 
 @cmd.route('/kick/', methods=['GET', 'POST'])
 def kick():
+    """Kick a player from the server."""
     player = request.json['player']
     reason = request.json.get('reason', '')
     logger.info(f'requested kick player {player}') 
