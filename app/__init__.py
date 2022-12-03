@@ -105,7 +105,7 @@ def create_app(alias=None, instance_path=None):
 
     # Configure log handling
     # ----------------------
-    # modify werkzeug so development/testing log output goes to console
+    # modify werkzeug so development log output goes to console
     if app.debug:
         # add the default [stream] handler so application logs go to stdout
         app.logger.addHandler(default_handler)
@@ -125,6 +125,8 @@ def create_app(alias=None, instance_path=None):
     logging.getLogger('root').addHandler(fh)
 
     # set DEBUG loglevel on any loggers by looking at config values
+    # TODO, I think this must be placed after registering blueprints?
+    #   Otherwise how am I going to set a logger that doesn't yet exist?
     loggers = [
         logger.lower()[6:]
         for logger, value in app.config.items()
