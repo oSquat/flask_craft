@@ -49,7 +49,6 @@ def get_random(n, chars='alnum'):
 @pytest.fixture(scope='function')
 def fake_server():
     """Yield a fake minecraft server available via rcon"""
-    #logging.getLogger().addHandler(logging.StreamHandler())
     fake_server = FakeServer(password='password')
 
     def _run():
@@ -61,9 +60,16 @@ def fake_server():
     while not fake_server.server.is_serving():
         time.sleep(0.25)
     yield fake_server
-    if fake_server.server.is_serving():
-        with MCRcon('localhost', 'password') as mcr:
-            mcr.command('stop')        
+    try:
+        if fake_server.server.is_serving():
+            with MCRcon('localhost', 'password') as mcr:
+                mcr.command('stop')        
+    except ConnectionResetError:
+        # I think sometimes fake_server serves for slightly longer than we
+        # expect and a ConnectionResetError happens when we try to establish
+        # an RCON connection. I think there a re a lot of these odd timing
+        # issues that come up when using concurrency.
+        pass
 
 @pytest.fixture(scope='function')
 def mcr(fake_server):
