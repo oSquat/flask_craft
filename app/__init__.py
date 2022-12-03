@@ -6,7 +6,8 @@ import os
 
 from flask import Flask
 from flask.logging import default_handler
-from mcrcon import MCRcon
+
+from .MCRconLib import MCRcon
 
 ####################
 # Flask extensions #
