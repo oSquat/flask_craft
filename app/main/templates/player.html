@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/notify.css') }}" />
+{% endblock %}
+{% block js %}
+<script type="module" src="{{ url_for('static', filename='js/notify.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/player.js') }}"></script>
+{% endblock %}
+{% block content %}
+<div id="player" class="content">
+  <h5>{{ player }}</h5>
+</div>
+<div id="kickban" class="content">
+  <button id="btnKick">kick</button>
+</div>
+<input type="hidden" id="url-cmd-kick" value={{ url_for('cmd.kick') }} />
+    
+{% endblock %}
