@@ -36,8 +36,8 @@ class MCR():
     # we get a response seems to fix things for now.
     def command(self, command):
         for _ in range(0,3):
-            response = self._mcr.command('list')
-            if len(response) > 0: continue
+            response = self._mcr.command(command)
+            if len(response) > 0: break
         return response
 
 
