@@ -5,22 +5,16 @@ window.onload=function() {
 };
 
 function getPlayers() {
-  // the url to add items to the cart is stored in a hidden field in our html
   var urlList = document.getElementById("url-cmd-list").value;
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-  if (this.readyState != 4) {
-      return;
-    }
-    updatePlayers(this.responseText);
-  };
-  xhttp.open("GET", urlList, true);
-  xhttp.send();
+  fetch(urlList, {
+    method: "GET",
+  })
+  .then(response => response.json())
+  .then(response => updatePlayers(response));
 }
 
 function updatePlayers(jsonReturn) {
 
-  jsonReturn = JSON.parse(jsonReturn);
   var count = jsonReturn["max"];
   var max = jsonReturn["count"];
   var players = jsonReturn["players"];
