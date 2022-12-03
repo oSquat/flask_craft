@@ -2,7 +2,7 @@
 import json
 import re
 
-from flask import current_app
+from flask import current_app, request
 
 from . import logger
 from . import cmd
@@ -35,7 +35,18 @@ def list():
         'players': player_list.split(', ')
     }, 200)
 
-@cmd.route('/kick/<user>', methods=['GET'])
-def kick(user):
-    current_app.tmux_pane.send_keys(f'/kick {user}')
-    return (f'kicked {user}', 200)
+@cmd.route('/kick/', methods=['GET', 'POST'])
+def kick():
+    player = request.json['player']
+    logger.info(f'requested kick player {player}') 
+    response = current_app.mcr.command(f'kick {player}')
+
+    if response == 'No player was found':
+        status = 'failure'
+    else:
+        status = 'success'
+    json = {
+        'status': status,
+        'response': response
+    }
+    return (json, 200)
