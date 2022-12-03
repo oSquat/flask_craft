@@ -36,7 +36,7 @@ if __name__ == '__main__':
         'mimic a real server, separate from commands available through the\n'
         'RCON server. For example, players can join and leave.\n'
         "  > fake_server.player_join('example_player')\n"
-        "  > fake_Server.player_leave(''example_player')\n"
+        "  > fake_server.player_leave(''example_player')\n"
     ))
 
     print('To terminate the fake_server, use the "stop" command:')
