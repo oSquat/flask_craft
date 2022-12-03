@@ -42,11 +42,11 @@ def kick():
     response = current_app.mcr.command(f'kick {player}')
 
     if response == 'No player was found':
-        status = 'failure'
+        result = 'failure'
     else:
-        status = 'success'
+        result = 'success'
     json = {
-        'status': status,
+        'result': result,
         'response': response
     }
     return (json, 200)

@@ -7,12 +7,12 @@ window.onload=function() {
 };
 
 function kickResponse(response) {
-  // flash a message indicating results
+  // flash a message indicating server response
   // expects response json containing:
   //	status: success or failure, matches "color" of notify()
   //    response: a message from the server
   var color = null;
-  if (response['status'] == 'success') {
+  if (response['result'] == 'success') {
     color = "success"
   } else {
     color = "danger"
