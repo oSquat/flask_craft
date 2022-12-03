@@ -71,7 +71,7 @@ def test_cmd_kick_returns_success_result(fake_server, client):
         fake_server.player_join(player)
     player = players[0]
 
-    # kick the player, and confirm player count is 2
+    # kick the player
     rv = client.post(
         url_for('cmd.kick'),
         content_type='application/json',
@@ -80,3 +80,20 @@ def test_cmd_kick_returns_success_result(fake_server, client):
     j = json.loads(rv.data)
 
     assert j['result'] == 'success'
+
+def test_cmd_kick_returns_failure_result(fake_server, client):
+    """Test kick command response result can be failure"""
+    # add 3 players, choose the first to kick
+    players = [get_random(5) for i in range(0, 3)]
+    for player in players:
+        fake_server.player_join(player)
+
+    # kick a player that isn't in the list of players
+    rv = client.post(
+        url_for('cmd.kick'),
+        content_type='application/json',
+        data=json.dumps({'player': get_random(3)})
+    )
+    j = json.loads(rv.data)
+
+    assert j['result'] == 'failure'
