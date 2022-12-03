@@ -39,3 +39,26 @@ def test_cmd_list_max(fake_server, client):
     rv = client.get(url_for('cmd.list'))
     j = json.loads(rv.data)
     assert j['max'] == 5
+
+def test_cmd_kick(fake_server, client):
+    """The kick command removes a player"""
+    # add 3 players, choose the first to kick
+    players = [get_random(5) for i in range(0, 3)]
+    for player in players:
+        fake_server.player_join(player)
+    player = players[0]
+
+    # sanity check, there are 3 players now
+    rv = client.get(url_for('cmd.list'))
+    j = json.loads(rv.data)
+    assert j['count'] == 3
+
+    # kick the player, and confirm player count is 2
+    client.post(
+        url_for('cmd.kick'),
+        content_type='application/json',
+        data=json.dumps({'player': player})
+    )
+    rv = client.get(url_for('cmd.list'))
+    j = json.loads(rv.data)
+    assert j['count'] == 2
