@@ -38,8 +38,9 @@ def list():
 @cmd.route('/kick/', methods=['GET', 'POST'])
 def kick():
     player = request.json['player']
+    reason = request.json.get('reason', '')
     logger.info(f'requested kick player {player}') 
-    response = current_app.mcr.command(f'kick {player}')
+    response = current_app.mcr.command(f'kick {player} {reason}')
 
     if response == 'No player was found':
         result = 'failure'
