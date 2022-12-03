@@ -115,3 +115,25 @@ def test_cmd_kick_returns_server_response(fake_server, client):
     j = json.loads(rv.data)
 
     assert j['response'] == f'Kicked {player}: Kicked by an operator'
+
+def test_cmd_kick_with_message_returns_server_response(fake_server, client):
+    """Test kick command accepts and reflects a custom kick message"""
+    # add 3 players, choose the first to kick
+    players = [get_random(5) for i in range(0, 3)]
+    for player in players:
+        fake_server.player_join(player)
+    player = players[0]
+    reason = get_random(10)
+
+    # kick the player
+    rv = client.post(
+        url_for('cmd.kick'),
+        content_type='application/json',
+        data=json.dumps({
+            'player': player,
+            'reason': reason
+        })
+    )
+    j = json.loads(rv.data)
+
+    assert j['response'] == f'Kicked {player}: {reason}'
