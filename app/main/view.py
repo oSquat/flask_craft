@@ -9,6 +9,7 @@ from . import main
 def root():
     return render_template('root.html')
 
-@main.route('/player/<player>', methods=['GET'])
+@main.route('/player/')
+@main.route('/player/<player>/', methods=['GET'])
 def player(player):
    return render_template('player.html', player=player) 

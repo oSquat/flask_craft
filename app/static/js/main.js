@@ -19,6 +19,12 @@ function updatePlayers(jsonReturn) {
   var max = jsonReturn["count"];
   var players = jsonReturn["players"];
 
+  var urlPlayer = document.getElementById("url-main-player").value;
+  for (let i = 0; i < players.length; i++) {
+    player = players[i];
+    players[i] = "<a href=" + urlPlayer + player + ">" + player + "</a>";
+  }
+
   var divPlayers = document.getElementById("players");
   divPlayers.innerHTML = 
 		"<b>There are " + max + " of " + count + " players:</b></br>";
