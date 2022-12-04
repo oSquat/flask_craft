@@ -31,3 +31,5 @@ function updatePlayers(jsonReturn) {
   divPlayers.innerHTML += players.join(" &middot ");
 
 }
+
+// vim: tabstop=2 shiftwidth=2 expandtab
