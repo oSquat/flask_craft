@@ -28,6 +28,8 @@ function kick() {
   
   var urlKick = document.getElementById("url-cmd-kick").value;
   var player = document.getElementById("value-player").value;
+  var reason = document.getElementById("input-reason").value;
+  var body = {"player": player, "reason": reason};
 
   fetch(urlKick, {
     method: 'POST',
@@ -35,7 +37,7 @@ function kick() {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({"player": player})
+    body: JSON.stringify(body)
   })
   .then(response => response.json())
   .then(response => kickResponse(response));

@@ -11,7 +11,12 @@
   <h5>{{ player }}</h5>
 </div>
 <div id="kickban" class="content">
-  <button id="btnKick">kick</button>
+  <div class="two columns">
+    <button class="u-full-width" id="btnKick">kick</button>
+  </div>
+  <div class="ten columns">
+    <input id="input-reason" class="u-full-width" type="text" placeholder="Kicked by an operator">
+  </div>
 </div>
 <input type="hidden" id="url-cmd-kick" value={{ url_for('cmd.kick') }} />
 <input type="hidden" id="value-player" value={{ player }} />
